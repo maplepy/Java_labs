@@ -1,8 +1,8 @@
-package lab3.test;
+package lab4.test;
 
-import lab3.model.*;
-import lab3.store.ProductStore;
-import lab3.store.WoodDirectory;
+import lab4.model.*;
+import lab4.store.ProductStore;
+import lab4.store.WoodDirectory;
 
 import java.io.*;
 import java.util.Scanner;
@@ -87,6 +87,7 @@ public class TestByConsole implements Serializable {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("\nБажаєте повторити введення? 1 - Так, 2 - Ні.");
+                in.nextLine();
                 switch (in.nextLine()) {
                     case "1":
                         break;

@@ -1,0 +1,3 @@
+Thu May 13 10:35:59 EEST 2021 1 logged in
+Thu May 13 10:38:18 EEST 2021 added Waste: weight: 0.03
+Thu May 13 10:39:28 EEST 2021 added Модрина вага: 863,938
