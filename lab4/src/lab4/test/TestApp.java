@@ -24,6 +24,7 @@ public class TestApp {
             ps.add(new Timber(wd.get(1), 2f, 1f, 1f));
             ps.add(new Timber(wd.get(2), 10f, 5f, 4f));
             ps.add(new Timber(wd.get(2), 1f, 1f, 2f));
+            ps.add(new Timber(wd.get(2), 3f, 1f, 2f));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Введення продуктів",
                     JOptionPane.ERROR_MESSAGE);
@@ -34,28 +35,33 @@ public class TestApp {
 
         ListIterator <Object> litr = ps.listIterator();
 
+        int maxWeight = 1;
+
         System.out.println("\nПерелік виробів до вилучення");
         System.out.println(ps.toString());
-        while (litr.hasNext()){
-            litr.next();
-        }
-        System.out.println("Перелік виробів після вилучення");
-        System.out.println(ps.toString());
+        removeIf(litr, maxWeight);
 
-        System.out.println("\nПерелік виробів до вилучення\n" + ps);
         while(litr.hasPrevious())
         {
             IWeight obj = (IWeight) litr.previous();
-            if(obj.weight() > 10)
+            if(obj.weight() > maxWeight)
                 litr.remove();
         }
         System.out.println("\nПерелік виробів після вилучення\n" + ps);
     }
+
     private float calcWeight(){
         float fullWeight = 0;
         for (Object timber: ps.getArr()){
             fullWeight += ((IWeight)timber).weight();
         }
         return fullWeight;
+    }
+    private void removeIf(ListIterator<Object> litr, int maxWeight) {
+        while (litr.hasNext()){
+            IWeight obj = (IWeight) litr.next();
+            if(obj.weight() > maxWeight)
+                litr.remove();
+        }
     }
 }

@@ -39,7 +39,7 @@ public class TestApp {
         System.out.println("Перелік виробів до вилучення продуктів вагою понад 100 одиниць");
         ps.doForAll(System.out::println);
 
-        Predicate<Object> prd = o -> o instanceof Timber && ((IWeight) o).weight() > 100f;
+        Predicate<Object> prd = o -> o instanceof Timber && ((IWeight) o).weight() > 1f;
         ps.remove(prd);
         System.out.println("\nПерелік виробів після вилучення продуктів вагою понад 100 одиниць");
         ps.doForAll(System.out::println);

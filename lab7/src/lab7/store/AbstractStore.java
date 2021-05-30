@@ -1,19 +1,23 @@
-package lab4.store;
+package lab7.store;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class AbstractStore implements Serializable, Iterable <Object>{
     protected Object[] arr = new Object[1];
     protected int count = 0;
     protected String className = this.getClass().getSimpleName();
+    protected Object monitor = new Object();
 
     protected void add(Object newObject){
-        if(count == arr.length){
-            arr = Arrays.copyOf(arr, count + count/2+1);
+        synchronized (monitor) {
+            if (count == arr.length) {
+                arr = Arrays.copyOf(arr, count + count / 2 + 1);
+            }
+            arr[count++] = newObject;
         }
-        arr[count++] = newObject;
     }
     public void clear()
     {
@@ -56,7 +60,9 @@ public class AbstractStore implements Serializable, Iterable <Object>{
 
         @Override
         public void remove() {
-            System.arraycopy(arr,current,arr,current-1,count-- -current--);
+            /*System.arraycopy(arr, 0, arr, 0, current);
+            System.arraycopy(arr, current+1, arr, current, count-- - current--);*/
+            System.arraycopy(arr, current, arr, current - 1, count-- - current--);
         }
     }
 
@@ -69,7 +75,7 @@ public class AbstractStore implements Serializable, Iterable <Object>{
 
         @Override
         public Object previous() {
-            if(current >= 0) return arr[--current];
+            if(current > 0) return arr[--current];
             else throw new NoSuchElementException();
         }
 
@@ -98,6 +104,31 @@ public class AbstractStore implements Serializable, Iterable <Object>{
                 arr[i] = arr[i-1];
             }
             arr[current] = o;
+        }
+    }
+    public void remove(Predicate<Object> prd) {
+     Iterator<Object> itr = this.iterator();
+     while (itr.hasNext()){
+         Object obj = (Object) itr.next();
+         if(prd.test(obj)) {
+             itr.remove();
+         }
+     }
+    }
+    public void doForAll(Consumer<Object> cns){
+        Iterator<Object> itr = this.iterator();
+        while (itr.hasNext()){
+            Object obj = (Object) itr.next();
+            cns.accept(obj);
+        }
+    }
+    public void doOnlyFor(Predicate<Object> prd, Consumer<Object> cns){
+        Iterator<Object> itr = this.iterator();
+        while(itr.hasNext()){
+            Object obj = (Object) itr.next();
+            if(prd.test(obj)){
+                cns.accept(obj);
+            }
         }
     }
 }
